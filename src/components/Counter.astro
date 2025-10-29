@@ -72,8 +72,25 @@ import {
         timeText = filteredParts.join(', ') + ' e ' + lastPart;
       }
 
+      // Ajusta o tamanho da fonte baseado no comprimento do texto
+      let fontSize = '2.2rem';
+      const textLength = timeText.replace(/<[^>]*>/g, '').length;
+
+      if (textLength > 80) {
+        fontSize = '1.2rem';
+      } else if (textLength > 60) {
+        fontSize = '1.4rem';
+      } else if (textLength > 40) {
+        fontSize = '1.6rem';
+      } else if (textLength > 30) {
+        fontSize = '1.8rem';
+      }
+
       if (counterElement) {
-        counterElement.innerHTML = `${timeText} <br> Sem falar sobre o Domingo! 🎉`;
+        counterElement.innerHTML = `<div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: center;">
+          <div style="font-size: ${fontSize}; font-weight: 800; word-wrap: break-word; max-width: 100%; text-align: center; line-height: 1.4;">${timeText}</div>
+          <div style="font-size: 1.2rem; font-weight: 400; color: #fff; text-align: center;">Sem falar sobre o Domingo! 🎉</div>
+        </div>`;
       }
     } catch (err) {
       console.error(err);
