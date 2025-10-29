@@ -37,12 +37,13 @@ import {
 
       const parts = [];
 
-      if (years > 0) parts.push(formatTimeUnit(years, 'ano', 'anos'));
-      if (months > 0) parts.push(formatTimeUnit(months, 'mês', 'meses'));
-      if (weeks > 0) parts.push(formatTimeUnit(weeks, 'semana', 'semanas'));
-      if (days > 0) parts.push(formatTimeUnit(days, 'dia', 'dias'));
-      if (hours > 0) parts.push(formatTimeUnit(hours, 'hora', 'horas'));
-      if (minutes > 0) parts.push(formatTimeUnit(minutes, 'minuto', 'minutos'));
+      if (years > 0) parts.push(formatTimeUnit(years, 'ano ', 'anos '));
+      if (months > 0) parts.push(formatTimeUnit(months, 'mês ', 'meses '));
+      if (weeks > 0) parts.push(formatTimeUnit(weeks, 'semana ', 'semanas '));
+      if (days > 0) parts.push(formatTimeUnit(days, 'dia ', 'dias '));
+      if (hours > 0) parts.push(formatTimeUnit(hours, 'hora ', 'horas '));
+      if (minutes > 0)
+        parts.push(formatTimeUnit(minutes, 'minuto ', 'minutos '));
 
       // Sempre mostra segundos se for a única unidade ou se não houver nada maior que minutos
       if (
@@ -54,7 +55,7 @@ import {
           hours === 0 &&
           minutes === 0)
       ) {
-        parts.push(formatTimeUnit(seconds, 'segundo', 'segundos'));
+        parts.push(formatTimeUnit(seconds, 'segundo ', 'segundos '));
       }
 
       const filteredParts = parts.filter((p) => p !== '');
@@ -72,7 +73,7 @@ import {
       }
 
       if (counterElement) {
-        counterElement.innerHTML = `${timeText} sem falar sobre o Domingo! 🎉`;
+        counterElement.innerHTML = `${timeText} <br> Sem falar sobre o Domingo! 🎉`;
       }
     } catch (err) {
       console.error(err);
