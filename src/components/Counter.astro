@@ -1,22 +1,39 @@
 ---
+import {
+  getLastReset,
+  setLastReset,
+  calculateTimeSince,
+} from '../utils/timer.js';
 ---
-<div id="counter">Contando...</div>
+
+<div id="counter">Carregando...</div>
 
 <script>
-  import { getLastReset, setLastReset, calculateTimeSince } from '../utils/timer.js';
+  import {
+    getLastReset,
+    setLastReset,
+    calculateTimeSince,
+  } from '../utils/timer.js';
 
   const counterElement = document.getElementById('counter');
 
   async function updateCounter() {
-    let lastReset = await getLastReset();
-    if (!lastReset) {
-      await setLastReset();
-      lastReset = await getLastReset();
-    }
+    try {
+      let lastReset = await getLastReset();
+      if (!lastReset) {
+        await setLastReset();
+        lastReset = await getLastReset();
+      }
 
-    if (lastReset) {
       const { days, hours, minutes, seconds } = calculateTimeSince(lastReset);
-      counterElement.textContent = `${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos sem falar sobre o Domingo.`;
+      if (counterElement) {
+        counterElement.textContent = `${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos sem falar sobre o Domingo.`;
+      }
+    } catch (err) {
+      console.error(err);
+      if (counterElement) {
+        counterElement.textContent = 'Erro ao carregar o contador.';
+      }
     }
   }
 

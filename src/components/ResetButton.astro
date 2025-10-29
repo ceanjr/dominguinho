@@ -1,13 +1,19 @@
 ---
+import { setLastReset } from '../utils/timer.js';
 ---
+
 <button id="resetButton">Ela falou de novo 😅</button>
 
 <script>
   import { setLastReset } from '../utils/timer.js';
 
-  const resetButton = document.getElementById('resetButton');
-
-  resetButton.addEventListener('click', async () => {
-    await setLastReset();
-  });
+  if (typeof window !== 'undefined') {
+    const resetBtn = document.getElementById('resetButton');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', async () => {
+        await setLastReset();
+        location.reload(); // atualiza o contador imediatamente
+      });
+    }
+  }
 </script>
