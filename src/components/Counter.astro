@@ -17,6 +17,13 @@ import {
 
   const counterElement = document.getElementById('counter');
 
+  function formatTimeUnit(value: number, singular: string, plural: string) {
+    if (value === 0) return '';
+    if (value === 1)
+      return `<span class="time-unit">${value}</span> ${singular}`;
+    return `<span class="time-unit">${value}</span> ${plural}`;
+  }
+
   async function updateCounter() {
     try {
       let lastReset = await getLastReset();
@@ -25,14 +32,52 @@ import {
         lastReset = await getLastReset();
       }
 
-      const { days, hours, minutes, seconds } = calculateTimeSince(lastReset);
+      const { years, months, weeks, days, hours, minutes, seconds } =
+        calculateTimeSince(lastReset);
+
+      const parts = [];
+
+      if (years > 0) parts.push(formatTimeUnit(years, 'ano', 'anos'));
+      if (months > 0) parts.push(formatTimeUnit(months, 'mês', 'meses'));
+      if (weeks > 0) parts.push(formatTimeUnit(weeks, 'semana', 'semanas'));
+      if (days > 0) parts.push(formatTimeUnit(days, 'dia', 'dias'));
+      if (hours > 0) parts.push(formatTimeUnit(hours, 'hora', 'horas'));
+      if (minutes > 0) parts.push(formatTimeUnit(minutes, 'minuto', 'minutos'));
+
+      // Sempre mostra segundos se for a única unidade ou se não houver nada maior que minutos
+      if (
+        parts.length === 0 ||
+        (years === 0 &&
+          months === 0 &&
+          weeks === 0 &&
+          days === 0 &&
+          hours === 0 &&
+          minutes === 0)
+      ) {
+        parts.push(formatTimeUnit(seconds, 'segundo', 'segundos'));
+      }
+
+      const filteredParts = parts.filter((p) => p !== '');
+
+      let timeText = '';
+      if (filteredParts.length === 0) {
+        timeText = '<span class="time-unit">0</span> segundos';
+      } else if (filteredParts.length === 1) {
+        timeText = filteredParts[0];
+      } else if (filteredParts.length === 2) {
+        timeText = filteredParts.join(' e ');
+      } else {
+        const lastPart = filteredParts.pop();
+        timeText = filteredParts.join(', ') + ' e ' + lastPart;
+      }
+
       if (counterElement) {
-        counterElement.textContent = `${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos sem falar sobre o Domingo.`;
+        counterElement.innerHTML = `${timeText} sem falar sobre o Domingo! 🎉`;
       }
     } catch (err) {
       console.error(err);
       if (counterElement) {
-        counterElement.textContent = 'Erro ao carregar o contador.';
+        counterElement.textContent = 'Erro ao carregar o contador. 😢';
       }
     }
   }
