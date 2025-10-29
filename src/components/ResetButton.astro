@@ -1,0 +1,13 @@
+---
+---
+<button id="resetButton">Ela falou de novo 😅</button>
+
+<script>
+  import { setLastReset } from '../utils/timer.js';
+
+  const resetButton = document.getElementById('resetButton');
+
+  resetButton.addEventListener('click', async () => {
+    await setLastReset();
+  });
+</script>

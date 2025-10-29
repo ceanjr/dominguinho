@@ -1,0 +1,25 @@
+---
+---
+<div id="counter">Contando...</div>
+
+<script>
+  import { getLastReset, setLastReset, calculateTimeSince } from '../utils/timer.js';
+
+  const counterElement = document.getElementById('counter');
+
+  async function updateCounter() {
+    let lastReset = await getLastReset();
+    if (!lastReset) {
+      await setLastReset();
+      lastReset = await getLastReset();
+    }
+
+    if (lastReset) {
+      const { days, hours, minutes, seconds } = calculateTimeSince(lastReset);
+      counterElement.textContent = `${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos sem falar sobre o Domingo.`;
+    }
+  }
+
+  updateCounter();
+  setInterval(updateCounter, 1000);
+</script>
